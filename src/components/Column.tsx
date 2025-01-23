@@ -37,7 +37,7 @@ export default function Column({ column, onDelete }: ColumnProps) {
     <div
       ref={setNodeRef}
       className={cn(
-        'flex h-full w-80 shrink-0 flex-col rounded-lg bg-gray-100 p-4',
+        'flex flex-grow min-h-80 h-full w-80 shrink-0 flex-col rounded-lg bg-gray-100 p-4',
       )}
     >
       <div className="mb-4 flex items-center justify-between">
