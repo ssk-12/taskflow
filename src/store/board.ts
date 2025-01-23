@@ -49,13 +49,32 @@ export const useBoardStore = create<BoardState>()(
           };
         });
       },
-      updateTask: (taskId, updates) =>
-        set((state) => ({
-          tasks: {
-            ...state.tasks,
-            [taskId]: { ...state.tasks[taskId], ...updates },
-          },
-        })),
+      updateTask: (taskId: string, updates: Partial<Task>) => {
+        set((state) => {
+          const task = state.tasks[taskId];
+          if (!task) return;
+      
+          const updatedTask = { ...task, ...updates };
+          const sourceColumn = state.columns.find((col) => col.taskIds.includes(taskId));
+          const destinationColumn = state.columns.find((col) => col.id === updates.status);
+      
+          if (sourceColumn && destinationColumn && sourceColumn.id !== destinationColumn.id) {
+            // Remove task from source column
+            sourceColumn.taskIds = sourceColumn.taskIds.filter((id) => id !== taskId);
+      
+            // Add task to destination column
+            destinationColumn.taskIds.push(taskId);
+          }
+      
+          return {
+            tasks: {
+              ...state.tasks,
+              [taskId]: updatedTask,
+            },
+            columns: [...state.columns], // Ensure the columns array is updated
+          };
+        });
+      },      
       deleteTask: (taskId) =>
         set((state) => {
           const { [taskId]: deletedTask, ...remainingTasks } = state.tasks;
