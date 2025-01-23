@@ -19,7 +19,7 @@ export default function Column({ column, onDelete }: ColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const { tasks, addTask } = useBoardStore();
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: column.id,
   });
 
@@ -37,7 +37,8 @@ export default function Column({ column, onDelete }: ColumnProps) {
     <div
       ref={setNodeRef}
       className={cn(
-        'flex flex-grow min-h-80 h-full w-80 shrink-0 flex-col rounded-lg bg-gray-100 p-4',
+        'flex h-full w-80 shrink-0 flex-col rounded-lg bg-gray-100 p-4',
+        isOver && 'ring-2 ring-blue-400'
       )}
     >
       <div className="mb-4 flex items-center justify-between">
